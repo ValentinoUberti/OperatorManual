@@ -1,0 +1,28 @@
+---
+- name: List Kubernetes resources
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: List Kubernetes resources
+      kubernetes.core.k8s_info:
+        kind: "Subscription"
+        api_version: "operators.coreos.com/v1alpha1"
+      register: k8s_resources
+
+   
+
+    - name: Patch Operators subscriptions to Manual 
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: "operators.coreos.com/v1alpha1"
+          kind: "Subscription"
+          metadata:
+            name: "{{ item.metadata.name }}"
+            namespace: "{{ item.metadata.namespace }}"
+          spec:
+            installPlanApproval: "Manual"
+        state: present
+      loop: "{{ k8s_resources.resources }}"
+      when: item.spec.installPlanApproval == "Automatic"   
