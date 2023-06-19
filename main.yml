@@ -11,9 +11,7 @@
         api_version: "operators.coreos.com/v1alpha1"
       register: k8s_resources
 
-   
-
-    - name: Patch Operators subscriptions to Manual 
+    - name: Patch Operators subscriptions to Manual
       kubernetes.core.k8s:
         definition:
           apiVersion: "operators.coreos.com/v1alpha1"
@@ -25,4 +23,4 @@
             installPlanApproval: "Manual"
         state: present
       loop: "{{ k8s_resources.resources }}"
-      when: item.spec.installPlanApproval == "Automatic"   
+      when: item.spec.installPlanApproval == "Automatic"
