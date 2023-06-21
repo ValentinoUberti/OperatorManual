@@ -1,3 +1,6 @@
+# Use main.yml to connect using the already present ~/.kube/config
+
+## This is an example using k8s_auth module
 ```
 - hosts: localhost
   module_defaults:
